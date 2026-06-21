@@ -71,6 +71,35 @@ int check_account(void* data, int argc, char** argv, char** col_name)
 	return 0;
 }
 
+string password_input()
+{
+	string result;
+	char chr;
+	while (true)
+	{
+		chr = _getch();
+		if (chr == '\r')
+		{
+			break;
+		}
+		else if (chr == '\b')
+		{
+			if (result != "")
+			{
+				result.pop_back();
+				cout << "\b \b";
+			}
+		}
+		else
+		{
+			cout << "*";
+			result += chr;
+		}
+	}
+	cout << endl;
+	return result;
+}
+
 int main()
 {
 	while (true)
@@ -83,29 +112,7 @@ int main()
 		getline(cin, account);
 		cout << "请输入密码：";
 		// cin >> password; // 密码有回显
-		char chr;
-		while (true)
-		{
-			chr = _getch();
-			if (chr == '\r')
-			{
-				break;
-			}
-			else if (chr == '\b')
-			{
-				if (password != "")
-				{
-					password.pop_back();
-					cout << "\b \b";
-				}
-			}
-			else
-			{
-				cout << "*";
-				password += chr;
-			}
-		}
-		cout << endl;
+		password = password_input();
 
 		if (sqlite3_open(accounts_db_path.string().c_str(), &accounts_db) != SQLITE_OK)
 		{

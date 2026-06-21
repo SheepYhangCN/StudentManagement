@@ -184,29 +184,7 @@ namespace Admin
 		// 密码
 		string password;
 		cout << "设置密码：";
-		char chr;
-		while (true)
-		{
-			chr = _getch();
-			if (chr == '\r')
-			{
-				break;
-			}
-			else if (chr == '\b')
-			{
-				if (password != "")
-				{
-					password.pop_back();
-					cout << "\b \b";
-				}
-			}
-			else
-			{
-				cout << "*";
-				password += chr;
-			}
-		}
-		password = sha256(password);
+		password = sha256(password_input());
 		cout << endl;
 		// 身份
 		string role;
@@ -274,30 +252,7 @@ namespace Admin
 			{
 				password_checked = false;
 				cout << "请输入原密码：";
-				char chr;
-				while (true)
-				{
-					chr = _getch();
-					if (chr == '\r')
-					{
-						break;
-					}
-					else if (chr == '\b')
-					{
-						if (edit_value != "")
-						{
-							edit_value.pop_back();
-							cout << "\b \b";
-						}
-					}
-					else
-					{
-						cout << "*";
-						edit_value += chr;
-					}
-				}
-				cout << endl;
-				edit_value = sha256(edit_value);
+				edit_value = sha256(password_input());
 				sqlite3_exec(accounts_db, ("SELECT pass FROM accounts WHERE account = '" + account + "';").c_str(), check_password, nullptr, nullptr);
 				if (!password_checked)
 				{
@@ -422,29 +377,7 @@ namespace Admin
 			password_checked = true;
 			edit_value = "";
 			cout << "请输入新密码：";
-			char chr;
-			while (true)
-			{
-				chr = _getch();
-				if (chr == '\r')
-				{
-					break;
-				}
-				else if (chr == '\b')
-				{
-					if (edit_value != "")
-					{
-						edit_value.pop_back();
-						cout << "\b \b";
-					}
-				}
-				else
-				{
-					cout << "*";
-					edit_value += chr;
-				}
-			}
-			edit_value = sha256(edit_value);
+			edit_value = sha256(password_input());
 			cout << endl;
 		}
 		else

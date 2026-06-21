@@ -11,5 +11,6 @@ extern std::filesystem::path accounts_db_path;
 extern sqlite3 *accounts_db;
 
 std::string sha256(const std::string& str);
+std::string password_input();
 
 int check_account(void* data, int argc, char** argv, char** col_name);

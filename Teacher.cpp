@@ -70,30 +70,7 @@ namespace Teacher
 					string sql_query = "UPDATE accounts SET pass = '";
 					password_checked = false;
 					cout << "请输入原密码：";
-					char chr;
-					while (true)
-					{
-						chr = _getch();
-						if (chr == '\r')
-						{
-							break;
-						}
-						else if (chr == '\b')
-						{
-							if (new_password != "")
-							{
-								new_password.pop_back();
-								cout << "\b \b";
-							}
-						}
-						else
-						{
-							cout << "*";
-							new_password += chr;
-						}
-					}
-					cout << endl;
-					new_password = sha256(new_password);
+					new_password = sha256(password_input());
 					sqlite3_exec(accounts_db, ("SELECT pass FROM accounts WHERE account = '" + account + "';").c_str(), check_password, nullptr, nullptr);
 					if (!password_checked)
 					{
@@ -134,29 +111,7 @@ namespace Teacher
 			password_checked = true;
 			new_password = "";
 			cout << "请输入新密码：";
-			char chr;
-			while (true)
-			{
-				chr = _getch();
-				if (chr == '\r')
-				{
-					break;
-				}
-				else if (chr == '\b')
-				{
-					if (new_password != "")
-					{
-						new_password.pop_back();
-						cout << "\b \b";
-					}
-				}
-				else
-				{
-					cout << "*";
-					new_password += chr;
-				}
-			}
-			new_password = sha256(new_password);
+			new_password = sha256(password_input());
 			cout << endl;
 		}
 		else
