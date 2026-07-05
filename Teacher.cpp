@@ -2,6 +2,7 @@
 #include <filesystem>
 #include "libs/sqlite/sqlite3.h" // https://sqlite.org/
 #include "Teacher.h"
+#include "Students.h"
 #include <conio.h>
 
 #include "StudentManagement.h"
@@ -44,7 +45,10 @@ namespace Teacher
 	}
 	void students()
 	{
-		return; // todo
+		Students::init_classes_db();
+		Students::students_menu(false);
+		Students::close_classes_db();
+		return;
 	}
 	void edit_account()
 	{

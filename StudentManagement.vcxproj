@@ -142,12 +142,14 @@
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="libs\sqlite\sqlite3.c" />
     <ClCompile Include="StudentManagement.cpp" />
+    <ClCompile Include="Students.cpp" />
     <ClCompile Include="Teacher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Admin.h" />
     <ClInclude Include="libs\sqlite\sqlite3.h" />
     <ClInclude Include="StudentManagement.h" />
+    <ClInclude Include="Students.h" />
     <ClInclude Include="Teacher.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
