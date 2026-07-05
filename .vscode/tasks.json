@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "MSVC Build",
+            "type": "shell",
+            "command": "\"E:\\Microsoft Visual Studio\\18\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat\" x64 && cl.exe /EHsc /std:c++20 /Fe:${workspaceFolder}\\x64\\Debug\\StudentManagement.exe /Fo:${workspaceFolder}\\x64\\Debug\\ ${workspaceFolder}\\StudentManagement.cpp ${workspaceFolder}\\Admin.cpp ${workspaceFolder}\\Teacher.cpp ${workspaceFolder}\\Students.cpp ${workspaceFolder}\\libs\\sqlite\\sqlite3.c /I ${workspaceFolder} /link /SUBSYSTEM:CONSOLE",
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "cmd.exe",
+                        "args": ["/C"]
+                    }
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
