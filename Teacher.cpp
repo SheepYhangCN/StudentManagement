@@ -46,7 +46,7 @@ namespace Teacher
 	void students()
 	{
 		Students::init_classes_db();
-		Students::students_menu(false);
+		Students::menu(false);
 		Students::close_classes_db();
 		return;
 	}

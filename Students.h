@@ -11,19 +11,19 @@ namespace Students
 	void init_classes_db();
 	void close_classes_db();
 
-	void students_menu(bool is_admin);
-	void admin_students_menu();
-	void teacher_students_menu();
+	void menu(bool is_admin);
+	void admin_menu();
+	void teacher_menu();
 
-	void view_students_menu();
-	void view_students_by_class_menu();
-	void view_students_by_student_id();
-	void edit_student_menu();
+	void view_menu();
+	void view_by_class();
+	void view_studentid();
+	void edit_menu();
 	void edit_student_by_class();
-	void edit_student_by_student_id();
-	void delete_student_menu();
+	void edit_student_studentid();
+	void delete_menu();
 	void delete_student_by_class();
-	void delete_student_by_student_id();
+	void delete_student_studentid();
 
 	void add_student();
 	void edit_student(std::string table, std::string student_id);

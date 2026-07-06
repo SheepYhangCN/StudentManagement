@@ -390,7 +390,7 @@ namespace Admin
 	void students()
 	{
 		Students::init_classes_db();
-		Students::students_menu(true);
+		Students::menu(true);
 		Students::close_classes_db();
 		return;
 	}

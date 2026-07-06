@@ -13,6 +13,7 @@ namespace Students
 {
 	sqlite3* classes_db = nullptr;
 	string check_result_output = "";
+	string current_student_table = "";
 	void init_classes_db()
 	{
 		filesystem::path db_path = filesystem::current_path() / "classes_db.sqlite";
@@ -56,7 +57,7 @@ namespace Students
 		}
 		return "class" + _class;
 	}
-	void admin_students_menu()
+	void admin_menu()
 	{
 		int selected;
 		// 学生选单
@@ -77,23 +78,23 @@ namespace Students
 				case 0:
 					return; // 返回上一选单
 				case 1:
-					view_students_menu();
+					view_menu();
 					break;
 				case 2:
 					add_student();
 					break;
 				case 3:
-					edit_student_menu();
+					edit_menu();
 					break;
 				case 4:
-					delete_student_menu();
+					delete_menu();
 					break;
 			}
 			cout << endl;
 		}
 		return;
 	}
-	void teacher_students_menu()
+	void teacher_menu()
 	{
 		int selected;
 		// 学生选单
@@ -112,50 +113,60 @@ namespace Students
 				case 0:
 					return; // 返回上一选单
 				case 1:
-					view_students_menu();
+					view_menu();
 					break;
 				case 2:
-					edit_student_menu();
+					edit_menu();
 					break;
 			}
 			cout << endl;
 		}
 		return;
 	}
-	void students_menu(bool is_admin)
+	void menu(bool is_admin)
 	{
 		if (is_admin)
 		{
-			admin_students_menu();
+			admin_menu();
 		}
 		else
 		{
-			teacher_students_menu();
+			teacher_menu();
 		}
 		return;
 	}
-	void view_students_menu()
+	void view_menu()
 	{
 		int selected;
-		cout << " === 查看学生数据 === " << endl;
-		cout << "[1] 按班级筛选" << endl;
-		cout << "[2] 搜索完整学号" << endl;
-		cout << "[0] 返回" << endl;
-		cin >> selected;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		if (selected == 1)
+		while (true)
 		{
-			view_students_by_class_menu();
-		}
-		else if (selected == 2)
-		{
-			view_students_by_student_id();
+			cout << " === 查看学生数据 === " << endl;
+			cout << "[1] 按班级筛选" << endl;
+			cout << "[2] 搜索完整学号" << endl;
+			cout << "[0] 返回" << endl;
+			cin >> selected;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			switch (selected)
+			{
+				default:
+					break; // 回到while开头
+				case 0:
+					return; // 返回上一选单
+				case 1:
+					view_by_class();
+					break;
+				case 2:
+					view_studentid();
+					break;
+			}
+			cout << endl;
 		}
 		return;
 	}
-	void view_students_by_class_menu()
+	void view_by_class()
 	{
 		string table = get_table_name();
+		current_student_table = table;
 		int selected;
 		while (true)
 		{
@@ -177,10 +188,10 @@ namespace Students
 			}
 			else if (selected == 2)
 			{
-				string student_id;
-				cout << "输入你想搜索的完整学号：";
-				getline(cin, student_id);
-				query = "WHERE student_id == '" + student_id + "'";
+				string num;
+				cout << "输入你想搜索的学号：";
+				getline(cin, num);
+				query = "WHERE num == '" + num + "'";
 			}
 			else if (selected == 3)
 			{
@@ -199,7 +210,7 @@ namespace Students
 		}
 		return;
 	}
-	void view_students_by_student_id()
+	void view_studentid()
 	{
 		string student_id;
 		cout << "输入完整学号：";
@@ -210,35 +221,46 @@ namespace Students
 			return;
 		}
 		string table = "class" + to_string(stoi(student_id.substr(0, 2)));
+		current_student_table = table;
 		string sql_query = "SELECT num, name, gender, birthday, student_id FROM \"" + table + "\" WHERE student_id == '" + student_id + "'";
 		sqlite3_exec(classes_db, sql_query.c_str(), print_student, nullptr, nullptr);
 		cout << "====================" << endl;
 		return;
 	}
-	void edit_student_menu()
+	void edit_menu()
 	{
 		int selected;
-		cout << " === 编辑学生 === " << endl;
-		cout << "[1] 按班级筛选" << endl;
-		cout << "[2] 搜索完整学号" << endl;
-		cout << "[0] 返回" << endl;
-		cin >> selected;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		if (selected == 1)
+		while (true)
 		{
-			edit_student_by_class();
-		}
-		else if (selected == 2)
-		{
-			edit_student_by_student_id();
+			cout << " === 编辑学生 === " << endl;
+			cout << "[1] 按班级筛选" << endl;
+			cout << "[2] 搜索完整学号" << endl;
+			cout << "[0] 返回" << endl;
+			cin >> selected;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			switch (selected)
+			{
+				default:
+					break; // 回到while开头
+				case 0:
+					return; // 返回上一选单
+				case 1:
+					edit_student_by_class();
+					break;
+				case 2:
+					edit_student_studentid();
+					break;
+			}
+			cout << endl;
 		}
 		return;
 	}
 	void edit_student_by_class()
 	{
 		string table = get_table_name();
+		current_student_table = table;
 		int num;
-		cout << "学号（num）：";
+		cout << "学号：";
 		cin >> num;
 		if (cin.fail())
 		{
@@ -251,7 +273,7 @@ namespace Students
 		edit_student(table, format_student_id(table, num));
 		return;
 	}
-	void edit_student_by_student_id()
+	void edit_student_studentid()
 	{
 		string student_id;
 		cout << "输入完整学号：";
@@ -262,33 +284,44 @@ namespace Students
 			return;
 		}
 		string table = "class" + to_string(stoi(student_id.substr(0, 2)));
+		current_student_table = table;
 		edit_student(table, student_id);
 		return;
 	}
-	void delete_student_menu()
+	void delete_menu()
 	{
 		int selected;
-		cout << " === 删除学生 === " << endl;
-		cout << "[1] 按班级筛选" << endl;
-		cout << "[2] 搜索完整学号" << endl;
-		cout << "[0] 返回" << endl;
-		cin >> selected;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		if (selected == 1)
+		while (true)
 		{
-			delete_student_by_class();
-		}
-		else if (selected == 2)
-		{
-			delete_student_by_student_id();
+			cout << " === 删除学生 === " << endl;
+			cout << "[1] 按班级筛选" << endl;
+			cout << "[2] 搜索完整学号" << endl;
+			cout << "[0] 返回" << endl;
+			cin >> selected;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			switch (selected)
+			{
+				default:
+					break; // 回到while开头
+				case 0:
+					return; // 返回上一选单
+				case 1:
+					delete_student_by_class();
+					break;
+				case 2:
+					delete_student_studentid();
+					break;
+			}
+			cout << endl;
 		}
 		return;
 	}
 	void delete_student_by_class()
 	{
 		string table = get_table_name();
+		current_student_table = table;
 		int num;
-		cout << "学号（num）：";
+		cout << "学号：";
 		cin >> num;
 		if (cin.fail())
 		{
@@ -301,7 +334,7 @@ namespace Students
 		delete_student(table, format_student_id(table, num));
 		return;
 	}
-	void delete_student_by_student_id()
+	void delete_student_studentid()
 	{
 		string student_id;
 		cout << "输入完整学号：";
@@ -312,6 +345,7 @@ namespace Students
 			return;
 		}
 		string table = "class" + to_string(stoi(student_id.substr(0, 2)));
+		current_student_table = table;
 		delete_student(table, student_id);
 		return;
 	}
@@ -343,6 +377,7 @@ namespace Students
 		int num = (int)sqlite3_last_insert_rowid(classes_db);
 		string student_id = format_student_id(table, num);
 		sql_query = "UPDATE \"" + table + "\" SET student_id = '" + student_id + "', num = " + to_string(num) + " WHERE rowid == " + to_string(num);
+		err = nullptr;
 		sqlite3_exec(classes_db, sql_query.c_str(), nullptr, nullptr, &err);
 		if (err)
 		{
@@ -370,7 +405,7 @@ namespace Students
 		cout << check_result_output << endl;
 		// 确认
 		string confirm;
-		cout << "你确定要编辑该学生吗？（y/n）";
+		cout << "你确定要编辑以上学生吗？（y/n）";
 		getline(cin, confirm);
 		if (confirm != "y")
 		{
@@ -433,10 +468,10 @@ namespace Students
 			return;
 		}
 		cout << check_result_output << endl;
-		cout << "你确定要删除该学生吗？（yes/no）";
+		cout << "你确定要删除以上学生吗？（y/n）";
 		string confirm;
 		getline(cin, confirm);
-		if (confirm != "yes")
+		if (confirm != "y")
 		{
 			return;
 		}
@@ -458,6 +493,10 @@ namespace Students
 	int print_student(void* data, int argc, char** argv, char** col_name)
 	{
 		cout << "====================" << endl;
+		if (current_student_table != "")
+		{
+			cout << "班级：" << current_student_table.substr(5) << endl;
+		}
 		cout << "学号：" << argv[0] << endl;
 		if (argv[4])
 		{
