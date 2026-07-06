@@ -365,7 +365,7 @@ namespace Students
 		cout << "出生日期（YYYY-MM-DD）：";
 		getline(cin, birthday);
 		// 插入获取num
-		string sql_query = "INSERT INTO \"" + table + "\"(name, gender, birthday) VALUES ('" + name + "', '" + gender + "', '" + birthday + "');";
+		string sql_query = "INSERT INTO \"" + table + "\"(name, gender, birthday, student_id) VALUES ('" + name + "', '" + gender + "', '" + birthday + "', '0000');";
 		char* err = nullptr;
 		sqlite3_exec(classes_db, sql_query.c_str(), nullptr, nullptr, &err);
 		if (err)
